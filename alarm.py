@@ -8,7 +8,6 @@ from PyQt5.QtCore import QDateTime, QTimer, QTime, Qt
 import pygame
 from threading import Thread
 
-# Inisialisasi pygame mixer
 pygame.mixer.init()
 
 class ClockWidget(QWidget):
@@ -17,7 +16,7 @@ class ClockWidget(QWidget):
         self.setFixedSize(300, 300)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_time)
-        self.timer.start(1000)  # Update every second
+        self.timer.start(1000)
 
     def update_time(self):
         self.update()
@@ -30,11 +29,9 @@ class ClockWidget(QWidget):
         painter.translate(rect.center())
         painter.scale(rect.width() / 200.0, rect.height() / 200.0)
         
-        # Draw clock face
         painter.setBrush(QColor(30, 30, 30))
         painter.drawEllipse(-100, -100, 200, 200)
         
-        # Draw clock numbers
         font = QFont('Arial', 14, QFont.Bold)
         painter.setFont(font)
         painter.setPen(QColor(255, 255, 255))
@@ -45,7 +42,6 @@ class ClockWidget(QWidget):
             y = 80 * math.sin(radian - math.pi / 2)
             painter.drawText(int(x - 10), int(y + 10), str(i))
         
-        # Draw hour hand
         painter.save()
         hour_angle = 30 * (current_time.hour() % 12 + current_time.minute() / 60.0)
         painter.rotate(hour_angle)
@@ -54,7 +50,6 @@ class ClockWidget(QWidget):
         painter.drawRect(-5, -40, 10, 60)
         painter.restore()
 
-        # Draw minute hand
         painter.save()
         minute_angle = 6 * (current_time.minute() + current_time.second() / 60.0)
         painter.rotate(minute_angle)
@@ -63,7 +58,6 @@ class ClockWidget(QWidget):
         painter.drawRect(-3, -70, 6, 90)
         painter.restore()
 
-        # Draw second hand
         painter.save()
         second_angle = 6 * current_time.second()
         painter.rotate(second_angle)
@@ -87,11 +81,9 @@ class AlarmApp(QWidget):
 
         main_layout = QVBoxLayout()
 
-        # Gambar jam
         self.clock_widget = ClockWidget()
         main_layout.addWidget(self.clock_widget)
 
-        # Pilihan tanggal dan waktu
         datetime_layout = QHBoxLayout()
         datetime_label = QLabel('Set Date and Time:')
         datetime_label.setFont(QFont('Arial', 12, QFont.Bold))
@@ -109,9 +101,8 @@ class AlarmApp(QWidget):
 
         main_layout.addLayout(datetime_layout)
 
-        # Tombol untuk mengatur alarm
         self.set_alarm_button = QPushButton('Set Alarm', self)
-        self.set_alarm_button.setIcon(QIcon('alarm_icon.png'))  # Tambahkan ikon alarm
+        self.set_alarm_button.setIcon(QIcon('alarm_icon.png')) 
         self.set_alarm_button.setStyleSheet("""
             QPushButton {
                 font-size: 14pt;
@@ -128,7 +119,6 @@ class AlarmApp(QWidget):
         self.set_alarm_button.clicked.connect(self.set_alarm)
         main_layout.addWidget(self.set_alarm_button)
 
-        # Tombol untuk memilih lagu alarm
         self.choose_song_button = QPushButton('Choose Alarm Sound', self)
         self.choose_song_button.setStyleSheet("""
             QPushButton {
@@ -180,7 +170,7 @@ class AlarmApp(QWidget):
                         QMessageBox.warning(self, 'Error', f'Alarm sound file not found: {self.alarm_sound_path}')
                 except pygame.error as e:
                     QMessageBox.warning(self, 'Error', f'Failed to play alarm sound: {e}')
-                self.alarms.remove(alarm)  # Remove the alarm to prevent repeated playing
+                self.alarms.remove(alarm)  
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
